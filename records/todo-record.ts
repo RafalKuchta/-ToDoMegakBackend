@@ -1,10 +1,9 @@
-import {TodoEntity} from "../types";
+import {NewTodoEntity, TodoEntity} from "../types";
+import { pool } from "../utils/db";
 import {ValidationError} from "../utils/errors";
+import {FieldPacket} from "mysql2";
 
-interface NewTodoEntity extends Omit<TodoEntity, 'id'> {
-    id?: string;
-
-}
+type TodoRecordResult = [TodoEntity[], FieldPacket[]];
 
 export class TodoRecord implements TodoEntity {
     public id: string;
@@ -16,9 +15,18 @@ export class TodoRecord implements TodoEntity {
             throw new ValidationError('Nazwa zadanie nie może być pusta, ani przekraczać 1000 znaków.');
         }
 
+        this.id = obj.id;
         this.name = obj.name;
         this.completed = obj.completed;
 
+    }
+
+    static async getOne(id: string): Promise<TodoRecord | null> {
+        const [results] = await pool.execute("SELECT * FROM `todo` WHERE id = :id", {
+            id,
+        }) as TodoRecordResult;
+
+        return results.length === 0 ? null : new TodoRecord(results[0]);
     }
 
 }
