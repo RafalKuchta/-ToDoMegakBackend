@@ -29,4 +29,11 @@ export class TodoRecord implements TodoEntity {
         return results.length === 0 ? null : new TodoRecord(results[0]);
     }
 
+    static async findAll(name: string): Promise<TodoRecord[]> {
+        const [results] = await pool.execute("SELECT * FROM `todo` WHERE `name` LIKE :search", {
+            search: `%${name}%`,
+        }) as TodoRecordResult;
+
+        return results.map(result => new TodoRecord(result));
+    }
 }
