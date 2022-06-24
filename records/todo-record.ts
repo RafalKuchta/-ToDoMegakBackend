@@ -2,6 +2,7 @@ import {NewTodoEntity, TodoEntity} from "../types";
 import { pool } from "../utils/db";
 import {ValidationError} from "../utils/errors";
 import {FieldPacket} from "mysql2";
+import {v4 as uuid} from "uuid";
 
 type TodoRecordResult = [TodoEntity[], FieldPacket[]];
 
@@ -35,5 +36,39 @@ export class TodoRecord implements TodoEntity {
         }) as TodoRecordResult;
 
         return results.map(result => new TodoRecord(result));
+    }
+
+    async insert(): Promise<void> {
+        if (!this.id) {
+            this.id = uuid();
+        } else {
+            throw new Error('Cannot insert id, because it is already exist.');
+        };
+
+        if (!this.completed) {
+            this.completed = false;
+        }
+
+        await pool.execute("INSERT INTO `todo` (`id`, `name`, `completed`) VALUES(:id, :name, :completed)", this);
+    }
+
+    async delete(): Promise<void> {
+        await pool.execute("DELETE FROM `todo` WHERE `id` = :id", {
+            id: this.id,
+        });
+    }
+
+    async done(): Promise<void> {
+        await pool.execute("UPDATE `todo` SET `completed` = :completed WHERE `id` = :id", {
+            id: this.id,
+            completed: true,
+        });
+    }
+
+    async back(): Promise<void> {
+        await pool.execute("UPDATE `todo` SET `completed` = :completed WHERE `id` = :id", {
+            id: this.id,
+            completed: false,
+        });
     }
 }
