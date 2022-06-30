@@ -43,7 +43,7 @@ export class TodoRecord implements TodoEntity {
             this.id = uuid();
         } else {
             throw new Error('Cannot insert id, because it is already exist.');
-        };
+        }
 
         if (!this.completed) {
             this.completed = false;
@@ -69,6 +69,13 @@ export class TodoRecord implements TodoEntity {
         await pool.execute("UPDATE `todo` SET `completed` = :completed WHERE `id` = :id", {
             id: this.id,
             completed: false,
+        });
+    }
+
+    async editName(name: string): Promise<void> {
+        await pool.execute("UPDATE `todo` SET `name` = :name WHERE `id` = :id", {
+            id: this.id,
+            name,
         });
     }
 }

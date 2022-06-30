@@ -7,7 +7,7 @@ export const todoRouter = Router();
 todoRouter
     .get('/',  (req, res) => {
         res.json({
-            ok: 'ok',
+            ok: 'Backend działa',
         });
     })
     .get('/search/:name?', async (req, res) => {
@@ -30,6 +30,15 @@ todoRouter
             throw new ValidationError('No such this task.');
         }
         await todo.done();
+    })
+    .patch('/edit/:id', async (req, res) => {
+        const todo = await TodoRecord.getOne(req.params.id);
+        const name = req.body.name;
+
+        if (!todo) {
+            throw new ValidationError('No such this task.');
+        }
+        await todo.editName(name);
     })
     .patch('/back/:id', async (req, res) => {
         const todo = await TodoRecord.getOne(req.params.id);
