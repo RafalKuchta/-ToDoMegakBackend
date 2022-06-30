@@ -1,4 +1,4 @@
-import express, {json} from 'express';
+import express, {json, Router} from 'express';
 import cors from 'cors';
 import 'express-async-errors';
 import { handleError } from './utils/errors';
@@ -17,9 +17,9 @@ app.use(json());
 // }))
 
 //Routes
-// const router = Router();
+const router = Router();
 app.use('/todo', todoRouter);
-// app.use('/api', router);
+app.use('/api', router);
 
 app.use(handleError);
 
