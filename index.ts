@@ -19,7 +19,7 @@ app.use(json());
 
 //Routes
 const router = Router();
-app.use('/todo', todoRouter);
+router.use('/todo', todoRouter);
 app.use('/api', router);
 
 app.use(handleError);
