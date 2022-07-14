@@ -34,6 +34,6 @@ The application is available at the link:
 https://todo.networkmanager.pl/
 
 I'm working on an application in NestJs (with the possibility of user registration and logging into the account of each user.), but I didn't have time to finish until 7/15/2022. 
-Link to the repository:\
-Backend: https://github.com/RafalKuchta/ToDoMegakBackend-NestJs\
-Frontend: https://github.com/RafalKuchta/ToDoMegakFrontend-React-NestJs\
+Link to the repository:
+Backend: https://github.com/RafalKuchta/ToDoMegakBackend-NestJs
+Frontend: https://github.com/RafalKuchta/ToDoMegakFrontend-React-NestJs
